@@ -1,0 +1,70 @@
+import { FormSchema } from '/@/components/Table';
+
+export const formSchema: FormSchema[] = [
+  {
+    field: 'id',
+    label: 'id',
+    component: 'Input',
+    show: false,
+    componentProps: { disabled: true },
+    colProps: { span: 24 },
+  },
+  {
+    field: 'parentCode',
+    label: '父区划编号',
+    component: 'Input',
+    required: true,
+    componentProps: { disabled: true },
+    colProps: { span: 24 },
+  },
+  {
+    field: 'parentName',
+    label: '父区划名称',
+    component: 'Input',
+    componentProps: { disabled: true },
+  },
+  {
+    field: 'code',
+    label: '区划编号',
+    component: 'Input',
+    show: false,
+    slot: 'codeSlot',
+    colProps: { span: 24 },
+  },
+  {
+    field: 'subCode',
+    label: '区划编号',
+    component: 'Input',
+    slot: 'codeSlot',
+    required: true,
+    colProps: { span: 24 },
+  },
+  {
+    field: 'name',
+    label: '区划名称',
+    component: 'Input',
+    required: true,
+    colProps: { span: 24 },
+  },
+  {
+    field: 'regionLevel',
+    label: '区划等级',
+    component: 'Input',
+    required: true,
+    slot: 'levelSlot',
+    colProps: { span: 24 },
+  },
+  {
+    field: 'sort',
+    label: '区划排序',
+    component: 'InputNumber',
+    required: true,
+    colProps: { span: 24 },
+  },
+  {
+    field: 'remark',
+    label: '区划备注',
+    component: 'InputTextArea',
+    colProps: { span: 24 },
+  },
+];

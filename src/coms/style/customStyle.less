@@ -1,0 +1,205 @@
+// 表单中左右布局
+.rule_pre_fix{
+  .ant-input-prefix{
+    color: red;
+    padding-top: 4px;
+  }
+}
+.chao_form_warp{
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  .left {
+    flex:0 0 150px;
+    height: 100%;
+    overflow-y: auto;
+    padding-top: 10px;
+    border-right: 1px solid #ddd;
+    .list{
+      cursor: pointer;
+      margin-right: 15px;
+      text-align: center;
+      margin-bottom: 6px;
+      border-radius: 2px;
+
+      img{
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+        margin-top: -4px;
+      }
+    }
+  }
+  .f170{flex: 0 0 170px;}
+  .f200{flex: 0 0 200px;}
+  
+  .right {
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
+    // border-left: 2px solid #ddd;
+    padding-left: 5px;
+    padding-right: 10px;
+    .line{
+      padding-left: 10px;
+      padding-bottom: 5px;
+      border-bottom: 2px solid #ddd;
+      font-size: 15px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+  }
+  .check_active{
+    // background-color: #91d5ff;
+    background-color: @button-primary-color;
+    color: #fff;
+   
+  }
+
+  //分割线
+  .ant-divider.ant-divider-horizontal.ant-divider-plain.ant-divider-with-text{
+    width:100%;
+    overflow: hidden;
+    text-align: left !important;
+    font-weight: bold !important;
+    padding-bottom: 4px;
+    border-bottom: 2px solid #ddd;
+  }
+  .ant-divider-horizontal.ant-divider-with-text::after{
+    display: none !important;
+  }
+  .ant-divider-horizontal.ant-divider-with-text::before{
+    display: none !important;
+  }
+
+  .ant-form-item{
+    .ant-checkbox-inner{
+      border-color: #ccc;
+    }
+    .ant-radio-inner{
+      border-color: #ccc;
+    }
+  }
+  // 四级联动距离
+  .link_mb_20{
+    margin-bottom: -20px;
+  }
+  .link_mb_10{
+    margin-bottom: -10px;
+  }
+}
+
+// 弹窗样式控制
+.fullscreen-modal{
+  .custom_chao_modal{
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+  }
+}
+.ant-modal.custom_chao_modal{
+  position: fixed;
+  left: 0 ;
+  top: 0 ;
+  right: 0 ;
+  bottom: 0 ;
+  margin: auto;
+  .scrollbar{
+    padding-bottom: 0 !important;
+    padding-right: 4px;
+    .scrollbar__view{
+      >div{
+        height: 100% !important;
+      }
+    }
+  }
+  .ant-modal-content{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    .ant-modal-header{
+      padding: 10px;
+    }
+    .ant-modal-close-x{
+      height: 46px;
+      line-height: 46px;
+    }
+    .ant-modal-body{
+      flex: 1;
+      overflow-y: auto;
+    }
+    .ant-modal-footer{
+      padding: 6px 15px;
+    }
+  }
+
+  //表单
+  .ant-form-item-control-input-content{
+    >div{
+      >div{
+        width: 100%;
+      }
+    }
+  }
+
+  //表单
+  .ant-input-number{
+    width: 100% !important;
+  }
+  .scrollbar__view{
+    height: 100%;
+    >div{
+      height: 100%;
+      max-height: 100% !important;
+    }
+  }
+}
+
+// 提示信息
+.ant-modal.ant-modal-confirm{
+  position:relative;
+  top: 15% !important;
+  min-height: 135px;
+  .ant-modal-content{
+    position: relative;
+  }
+}
+
+.full-loading.absolute{
+  z-index: 2100 !important;
+}
+
+//表格
+.vben-basic-table-header__toolbar{
+  justify-content: flex-start !important;
+  padding: 5px !important;
+}
+.table-settings{
+  display: none !important;
+}
+
+//布局信息
+.vben-default-layout{
+  height: 100%;
+  .vben-layout-multiple-header--fixed{
+    position: relative !important;
+    width: calc(100% + 1px) !important;
+  }
+  .vben-default-layout-main{
+    overflow-x: hidden;
+  }
+  .vben-layout-content{
+    padding: 10px;
+    flex: 1;
+    overflow-y: auto;
+  }
+  .vben-default-layout-main{
+    >div[style='height: 80px;']{
+      display: none !important;
+    }
+  }
+}

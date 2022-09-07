@@ -1,0 +1,301 @@
+@prefix-cls: ~'@{namespace}-multiple-tabs';
+
+html[data-theme='dark'] {
+  .ant-tabs-tab:not(.ant-tabs-tab-active):hover {
+    background: #333;
+
+    &::before {
+      box-shadow: 10px 8px 0 0 #333;
+    }
+
+    &::after {
+      box-shadow: 10px 8px 0 0 #333;
+    }
+  }
+  .@{prefix-cls} {
+    .ant-tabs-tab {
+      border: none;
+      // border-bottom: 1px solid @border-color-base;
+    }
+  }
+}
+
+html[data-theme='light'] {
+  .@{prefix-cls} {
+    .ant-tabs-tab:not(.ant-tabs-tab-active) {
+      border: none;
+      // border: 1px solid #d9d9d9 !important;
+    }
+  }
+}
+
+.@{prefix-cls} {
+  z-index: 10;
+  height: @multiple-height + 5;
+  line-height: @multiple-height + 5;
+  background-color: @component-background;
+  box-shadow: 0 1px 2px #00152914;
+  // border-bottom: 1px solid @border-color-base;
+
+  .ant-tabs-small {
+    height: @multiple-height + 5;
+  }
+
+  .ant-tabs.ant-tabs-card {
+    .ant-tabs-nav {
+      // padding-top: 2px;
+      height: @multiple-height + 5;
+      margin: 0;
+      background-color: @component-background;
+      border: 0;
+      box-shadow: none;
+
+      &::before {
+        display: none;
+      }
+
+      .ant-tabs-nav-container {
+        height: @multiple-height;
+        padding-top: 2px;
+      }
+
+      .ant-tabs-tab {
+        height: @multiple-height;
+        padding: 0 26px;
+        line-height: @multiple-height;
+        color: @text-color-base;
+        background-color: @component-background;
+        transition: none;
+        border: none;
+        position: relative;
+        margin-top: 5px;
+        border-radius: 10px;
+
+        &::after {
+          position: absolute;
+          content: '';
+          width: 1px;
+          height: 10px;
+          top: 10px;
+          background: #999;
+          right: 0;
+        }
+
+        &:hover {
+          .ant-tabs-tab-remove {
+            opacity: 1;
+          }
+        }
+
+        .ant-tabs-tab-remove {
+          width: 8px;
+          height: 28px;
+          font-size: 12px;
+          color: inherit;
+          opacity: 0;
+          transition: none;
+          margin-left: 2px;
+          margin-right: -4px;
+
+          &:hover {
+            svg {
+              width: 0.8em;
+            }
+          }
+        }
+
+        // > div {
+        //   display: flex;
+        //   justify-content: center;
+        //   align-items: center;
+        // }
+
+        svg {
+          fill: @text-color-base;
+        }
+      }
+
+      .ant-tabs-tab:not(.ant-tabs-tab-active) {
+        &:hover {
+          color: @primary-color;
+          background: #eee;
+          padding-left: 27px;
+          padding-right: 25px;
+          z-index: 8;
+          left: -1px;
+          right: -1px;
+
+          &::before {
+            position: absolute;
+            content: '';
+            height: @multiple-height - 10;
+            width: @multiple-height - 10;
+            bottom: 0;
+            left: -20px;
+            background-color: transparent;
+            border-radius: 50%;
+            box-shadow: 10px 8px 0 0 #eee;
+            transform: rotate(5deg);
+          }
+
+          &::after {
+            position: absolute;
+            content: '';
+            height: @multiple-height - 10;
+            width: @multiple-height - 10;
+            bottom: 0;
+            right: -20px;
+            background-color: transparent;
+            border-radius: 50%;
+            box-shadow: 10px 8px 0 0 #eee;
+            transform: rotate(95deg);
+          }
+        }
+      }
+
+      .ant-tabs-tab-active {
+        position: relative;
+        background: @primary-color;
+        border: 0;
+        transition: none;
+        z-index: 10;
+        padding-left: 27px;
+        padding-right: 25px;
+        left: -1px;
+        right: -1px;
+
+        &::before {
+          position: absolute;
+          content: '';
+          height: @multiple-height - 10;
+          width: @multiple-height - 10;
+          bottom: 0;
+          left: -20px;
+          background-color: transparent;
+          border-radius: 50%;
+          box-shadow: 10px 8px 0 0 @primary-color;
+          transform: rotate(5deg);
+        }
+
+        &::after {
+          position: absolute;
+          content: '';
+          height: @multiple-height - 10;
+          width: @multiple-height - 10;
+          bottom: 0;
+          right: -20px;
+          background-color: transparent;
+          border-radius: 50%;
+          box-shadow: 10px 8px 0 0 @primary-color;
+          transform: rotate(95deg);
+        }
+
+        span {
+          color: @white !important;
+        }
+
+        .ant-tabs-tab-remove {
+          opacity: 1;
+        }
+
+        svg {
+          width: 0.7em;
+          fill: @white;
+        }
+      }
+    }
+
+    .ant-tabs-nav > div:nth-child(1) {
+      padding: 0 0 0 6px;
+
+      .ant-tabs-tab {
+        // margin-right: 3px !important;
+      }
+    }
+  }
+
+  .ant-tabs-tab:not(.ant-tabs-tab-active) {
+    .anticon-close {
+      font-size: 14px;
+
+      svg {
+        width: 0.6em;
+      }
+    }
+  }
+
+  .ant-dropdown-trigger {
+    display: inline-flex;
+  }
+
+  &--hide-close {
+    .ant-tabs-tab-remove {
+      opacity: 0 !important;
+    }
+  }
+
+  &-content {
+    &__extra-quick,
+    &__extra-redo,
+    &__extra-fold {
+      display: inline-block;
+      width: 36px;
+      height: @multiple-height;
+      line-height: @multiple-height;
+      color: @text-color-secondary;
+      text-align: center;
+      cursor: pointer;
+      border-left: 1px solid @border-color-base;
+
+      &:hover {
+        color: @text-color-base;
+      }
+
+      span[role='img'] {
+        transform: rotate(90deg);
+      }
+    }
+
+    &__extra-redo {
+      span[role='img'] {
+        transform: rotate(0deg);
+      }
+    }
+
+    &__info {
+      display: inline-block;
+      width: 100%;
+      height: @multiple-height - 2;
+      padding-left: 0;
+      margin-left: -10px;
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+  }
+}
+
+.ant-tabs-dropdown-menu {
+  &-title-content {
+    display: flex;
+    align-items: center;
+
+    .@{prefix-cls} {
+      &-content__info {
+        width: auto;
+        margin-left: 0;
+        line-height: 28px;
+      }
+    }
+  }
+
+  &-item-remove {
+    margin-left: auto;
+  }
+}
+
+.multiple-tabs__dropdown {
+  .ant-dropdown-content {
+    width: 172px;
+  }
+}

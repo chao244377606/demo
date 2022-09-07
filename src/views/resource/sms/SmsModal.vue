@@ -1,0 +1,93 @@
+<template>
+  <BasicModal
+    v-bind="$attrs"
+    @register="registerModal"
+    :title="getTitle"
+    @ok="handleSubmit"
+    :showOkBtn="!isDetail"
+    :width="900"
+  >
+    <div v-show="isDetail">
+      <Description size="middle" @register="registerDetail" :column="1" />
+    </div>
+    <div v-show="!isDetail">
+      <BasicForm @register="registerForm" />
+    </div>
+  </BasicModal>
+</template>
+<script lang="ts" setup>
+  import { ref, computed, unref } from 'vue';
+  import { BasicModal, useModalInner } from '/@/components/Modal';
+  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { formSchema, detailSchema } from './sms.data';
+  import { getSmsDetail, submitSms } from '/@/api/resource/sms';
+  import { Description, useDescription } from '/@/components/Description/index';
+
+  const emit = defineEmits(['success', 'register']);
+
+  const isDetail = ref(true);
+  const isUpdate = ref(true);
+  const rowId = ref('');
+  //详情
+  const [registerDetail, { setDescProps }] = useDescription({
+    schema: detailSchema,
+  });
+
+  const [registerForm, { setFieldsValue, resetFields, validate }] = useForm({
+    labelWidth: 100,
+    schemas: formSchema,
+    showActionButtonGroup: false,
+    baseColProps: {
+      span: 24,
+    },
+    actionColOptions: {
+      span: 23,
+    },
+  });
+
+  const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
+    resetFields();
+    setModalProps({ confirmLoading: false });
+    isUpdate.value = !!data?.isUpdate;
+    isDetail.value = !!data?.isDetail;
+    if (unref(isDetail)) {
+      const detail = await getSmsDetail({ id: data.record.id });
+      setDescProps({
+        data: detail,
+      });
+    } else {
+      if (unref(isUpdate)) {
+        rowId.value = data.record.id;
+        const detailData = await getSmsDetail({ id: data.record.id });
+        setFieldsValue({
+          ...detailData,
+        });
+      }
+    }
+  });
+
+  const getTitle = computed(() => {
+    if (unref(isUpdate)) {
+      return '编辑';
+    } else if (unref(isDetail)) {
+      return '详情';
+    } else {
+      return '新增';
+    }
+  });
+
+  async function handleSubmit() {
+    try {
+      const values = await validate();
+      setModalProps({ confirmLoading: true });
+      if (unref(isUpdate)) {
+        values.id = rowId.value;
+      }
+      await submitSms(values);
+      closeModal();
+      emit('success', { isUpdate: unref(isUpdate), values: { ...values, id: rowId.value } });
+    } finally {
+      setModalProps({ confirmLoading: false });
+    }
+  }
+</script>

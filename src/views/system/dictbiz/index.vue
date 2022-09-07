@@ -1,0 +1,179 @@
+<template>
+  <PageWrapper dense contentFullHeight contentClass="flex">
+    <BasicTable @register="dictTable" @row-click="rowClick" class="w-2/4 xl:w-3/5">
+      <template #toolbar>
+        <a-button type="primary" v-auth="'dictbiz_add'" @click="handleCreate">新增</a-button>
+      </template>
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.dataIndex === 'action'">
+          <TableAction
+            :actions="[
+              {
+                auth: 'dictbiz_edit',
+                icon: 'clarity:note-edit-line',
+                onClick: handleEdit.bind(null, record),
+              },
+              {
+                auth: 'dictbiz_delete',
+                icon: 'ant-design:delete-outlined',
+                color: 'error',
+                popConfirm: {
+                  title: '是否确认删除',
+                  confirm: handleDelete.bind(null, record),
+                },
+              },
+            ]"
+          />
+        </template>
+      </template>
+    </BasicTable>
+    <BasicTable @register="dictChildrenTable" class="w-2/4 xl:w-3/5">
+      <template #toolbar>
+        <a-button type="primary" v-auth="'dictbiz_add'" @click="handleChildrenCreate"
+          >新增</a-button
+        >
+      </template>
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.dataIndex === 'action'">
+          <TableAction
+            :actions="[
+              {
+                auth: 'dictbiz_edit',
+                icon: 'clarity:note-edit-line',
+                label: '编辑',
+                onClick: handleEdit.bind(null, record),
+              },
+              {
+                auth: 'dictbiz_delete',
+                icon: 'ant-design:delete-outlined',
+                color: 'error',
+                label: '删除',
+                popConfirm: {
+                  title: '是否确认删除',
+                  confirm: handleChidrenDelete.bind(null, record),
+                },
+              },
+              {
+                auth: 'dictbiz_add',
+                icon: 'clarity:plus-line',
+                label: '新增子项',
+                onClick: handleChildrenAdd.bind(null, record),
+              },
+            ]"
+          />
+        </template>
+      </template>
+    </BasicTable>
+    <DictBizModal @register="dictModal" @success="handleSuccess" />
+  </PageWrapper>
+</template>
+<script lang="ts" setup name="DictBiz">
+  import { ref } from 'vue';
+
+  import { BasicTable, useTable, TableAction } from '/@/components/Table';
+  import {
+    getDictBizParentPage,
+    getDictBizChildrenPage,
+    removeBizDict,
+  } from '/@/api/system/system';
+  import { PageWrapper } from '/@/components/Page';
+  import { useModal } from '/@/components/Modal';
+  import DictBizModal from './DictBizModal.vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
+
+  import { columns, searchFormSchema } from './dictbiz.data';
+
+  const parentRecord = ref({});
+  const { createMessage } = useMessage();
+  const [dictModal, { openModal }] = useModal();
+  const [dictTable, { reload }] = useTable({
+    title: '字典列表',
+    api: getDictBizParentPage,
+    rowKey: 'id',
+    columns,
+    formConfig: {
+      labelWidth: 120,
+      schemas: searchFormSchema,
+    },
+    useSearchForm: true,
+    actionColumn: {
+      width: 80,
+      title: '操作',
+      dataIndex: 'action',
+    },
+  });
+
+  const [dictChildrenTable, { setProps, reload: childrenReload }] = useTable({
+    title: '[]字典详情',
+    api: getDictBizChildrenPage,
+    rowKey: 'id',
+    searchInfo: { parentId: -1 },
+    immediate: false,
+    columns,
+    formConfig: {
+      labelWidth: 120,
+      schemas: searchFormSchema,
+    },
+    pagination: false,
+    useSearchForm: true,
+    actionColumn: {
+      width: 300,
+      title: '操作',
+      dataIndex: 'action',
+    },
+  });
+
+  function rowClick(record) {
+    parentRecord.value = record;
+    setProps({
+      title: '[' + record.dictValue + ']字典详情',
+      searchInfo: { parentId: record.id },
+    });
+    childrenReload();
+  }
+
+  function handleCreate() {
+    openModal(true, {
+      isUpdate: false,
+    });
+  }
+  function handleChildrenCreate() {
+    openModal(true, {
+      parentRecord: parentRecord.value,
+      isUpdate: false,
+    });
+  }
+  function handleChildrenAdd(record: Recordable) {
+    openModal(true, {
+      parentRecord: record,
+      isUpdate: false,
+    });
+  }
+
+  function handleEdit(record: Recordable) {
+    console.log(record);
+    openModal(true, {
+      record,
+      isUpdate: true,
+    });
+  }
+
+  async function handleDelete(record: Recordable) {
+    await removeBizDict({ ids: record.id });
+    createMessage.success('操作成功');
+    reload();
+  }
+
+  function handleSuccess() {
+    //操作成功提示
+    createMessage.success('操作成功');
+    reload();
+    childrenReload();
+  }
+
+  async function handleChidrenDelete(record: Recordable) {
+    await removeBizDict({ ids: record.id });
+    createMessage.success('操作成功');
+    childrenReload();
+  }
+</script>
